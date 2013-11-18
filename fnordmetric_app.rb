@@ -54,6 +54,26 @@ FnordMetric.namespace :emdrmon do
   # Relay-Specific Gauges
   #
 
+  # master
+
+  gauge :master_messages_per_minute,
+    :tick => 1.minute.to_i,
+    :title => "Master Announcer"
+
+  gauge :master_messages_per_hour,
+    :tick => 1.hour.to_i,
+    :title => "Master Announcer"
+
+  # secondary
+
+  gauge :secondary_messages_per_minute,
+    :tick => 1.minute.to_i,
+    :title => "Secondary Announcer"
+
+  gauge :secondary_messages_per_hour,
+    :tick => 1.hour.to_i,
+    :title => "Secondary Announcer"
+
   # us_west_1
 
   gauge :us_west_1_messages_per_minute,
@@ -161,6 +181,20 @@ FnordMetric.namespace :emdrmon do
   # Relay-specific Events
   #
 
+  #master
+
+  event :message_master do
+    incr :master_messages_per_minute, 1
+    incr :master_messages_per_hour, 1
+  end
+
+  #secondary
+
+  event :message_secondary do
+    incr :secondary_messages_per_minute, 1
+    incr :secondary_messages_per_hour, 1
+  end
+
   #us_west_1
 
   event :message_us_west_1 do
@@ -217,7 +251,9 @@ FnordMetric.namespace :emdrmon do
   widget 'Network Overview', {
     :title => "Messages per minute",
     :type => :numbers,
-    :gauges => [:us_west_1_messages_per_minute,
+    :gauges => [:master_messages_per_minute,
+                :secondary_messages_per_minute,
+                :us_west_1_messages_per_minute,
                 :us_central_1_messages_per_minute,
                 :us_east_1_messages_per_minute,
                 :ca_east_1_messages_per_minute,
@@ -231,8 +267,10 @@ FnordMetric.namespace :emdrmon do
   }
 
   widget 'Network Overview', {
-    :title => "Message History",
-    :gauges => [:us_west_1_messages_per_minute,
+    :title => "Message History per Relay",
+    :gauges => [:master_messages_per_minute,
+                :secondary_messages_per_minute,
+                :us_west_1_messages_per_minute,
                 :us_central_1_messages_per_minute,
                 :us_east_1_messages_per_minute,
                 :ca_east_1_messages_per_minute,
@@ -240,6 +278,7 @@ FnordMetric.namespace :emdrmon do
                 :eu_france_2_messages_per_minute,
                 :eu_denmark_1_messages_per_minute],
     :type => :timeline,
+    :plot_style => :areaspline,
     :width => 70,
     :autoupdate => 3
   }

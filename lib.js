@@ -12,7 +12,7 @@ var fnord = new Fnoed();
 
 // Returns a beautified verseion of the relay's URL
 function beautifyRelayName(relayURL){
-  return relayURL.replace('tcp://relay-', '').replace('.eve-emdr.com:8050', '').replace(/-/g, '_');
+  return relayURL.replace('tcp://', '').replace('relay-', '').replace('.eve-emdr.com:8050', '').replace(/-/g, '_');
 }
 
 

@@ -20,3 +20,5 @@ It is recommended to run this setup behind an `nginx` or similar reverse proxy a
 ## Known Issues
 
 Currently there are multiple layout issues related to fnordmetrics which can be resolved by manually editing the CSS in the gem's directory. Also you might experience rather high memory usage by Redis. Try to adjust `:event_data_ttl` at the bottom of `fnordmetric_app.rb` in that case.
+
+Also you won't be able to connect to EMDR's primary master announcer even though it shows up as properly connected. Please adjust `config.js` accordingly.
