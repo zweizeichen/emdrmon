@@ -10,11 +10,12 @@ Emdrmon is a realtime network monitoring web application for the EVE Market Data
 * Start your Redis server
 * `git clone` this repository
 * Run `npm install` and `bundle install` from inside your cloned repo
-* Execute `ruby fnordmetric_app.rb run` in order to start the web interface and aggregator
+* Execute `rackup` in order to start the web interface
+* Execute `ruby worker.rb` in order to spin up a fnordmetric worker
 * Execute `node app` to start the stat collector which will connect to the various relays
-* The web application will listen on port `4242` now - also an acceptor for the fnordmetrics API is running at port `2323`
+* The web application will listen on port `4242` now
 
-It is recommended to run this setup behind an `nginx` or similar reverse proxy and to control the processes via e.g. `supervisord`.
+It is recommended to run this setup behind an `nginx` or similar reverse proxy and to control the processes via e.g. `supervisord`. Note that this app makes heavy use of websockets, which are only supported by newer versions of nginx.
 
 ## Known Issues
 

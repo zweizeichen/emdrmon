@@ -1,6 +1,6 @@
 {
   "name": "emdrmon",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "zweizeichen <info@zweizeichen.org>",
   "description": "an EMDR monitoring application",
   "private": true,

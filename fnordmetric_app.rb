@@ -273,7 +273,5 @@ end
 
 FnordMetric.options = {
   :enable_active_users => false,
-  :event_data_ttl => 1.day
+  :event_data_ttl => 2.hours
 }
-
-FnordMetric.standalone
