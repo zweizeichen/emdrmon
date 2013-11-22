@@ -124,16 +124,6 @@ FnordMetric.namespace :emdrmon do
     :tick => 1.hour.to_i,
     :title => "EU Germany 1"
 
-  # eu_france_2
-
-  gauge :eu_france_2_messages_per_minute,
-    :tick => 1.minute.to_i,
-    :title => "EU France 2"
-
-  gauge :eu_france_2_messages_per_hour,
-    :tick => 1.hour.to_i,
-    :title => "EU France 2"
-
   # eu_denmark_1
 
   gauge :eu_denmark_1_messages_per_minute,
@@ -228,13 +218,6 @@ FnordMetric.namespace :emdrmon do
   event :message_eu_germany_1 do
     incr :eu_germany_1_messages_per_minute, 1
     incr :eu_germany_1_messages_per_hour, 1
-  end
-
-  #eu_france_2
-
-  event :message_eu_france_2 do
-    incr :eu_france_2_messages_per_minute, 1
-    incr :eu_france_2_messages_per_hour, 1
   end
 
   #eu_denmark_1
