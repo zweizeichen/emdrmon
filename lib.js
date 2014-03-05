@@ -36,10 +36,62 @@ var EMDRStatsListener = function(relay, isReference) {
   // Connect and register event handlers
   this.socket.connect(this.relay);
   this.socket.on('message', this.handleMessage.bind(this));
+
+  // Store timestamp of last message received
+  this.lastMessage = new Date().getTime();
+
+  // If we reconnect and still don't receive any messages, 
+  // increment pause between attempts gradually up to 30 minutes
+  this.reconnectAttempts = 0;
+  this.currentIntervalInSeconds = 1;
+  this.lastAttempt = new Date().getTime();
+
+  // Schedule connection watchdog
+  setInterval(this.watchConnection.bind(this), 1000);
+};
+
+EMDRStatsListener.prototype.watchConnection = function() {
+
+  var now = new Date();
+
+  // Automatically try to reconnect if there were no messages for 10 seconds
+  if((now.getTime() - this.lastMessage) > 10000) {
+
+    // Reconnect if necessary
+    if((now.getTime() - this.lastAttempt) > (this.currentIntervalInSeconds * 1000)){
+
+      // Construct time string
+      time = '[' + ('0' + now.getHours()).slice(-2)   + ':' + 
+                   ('0' + now.getMinutes()).slice(-2) + ':' + 
+                   ('0' + now.getSeconds()).slice(-2) + '] ';
+
+      // Reconnect
+      console.log(time + 'Reconnecting to ' + this.relay + '... ');
+      this.socket.connect(this.relay);
+
+      // Increase counters and reset lastAttempt
+      this.reconnectAttempts++;
+      this.lastAttempt = now.getTime();
+
+      // Calculate Interval
+      this.currentIntervalInSeconds = Math.pow((this.reconnectAttempts+2), 2);
+
+      // Cap at 30 minutes
+      if(this.currentIntervalInSeconds > 1800){
+        this.currentIntervalInSeconds = 1800;
+      }
+    }
+  }
 };
 
 EMDRStatsListener.prototype.handleMessage = function(message) {
-  // Sens regular stats to fnordmetric
+  // Reset reconnect attempts, now that we've got a message
+  this.reconnectAttempts = 0;
+
+  // Update lastMessage
+  this.lastMessage = new Date().getTime();
+
+  // Sends regular stats to fnordmetric
   fnord.send({_type: 'message_' + beautifyRelayName(this.relay)}, true);
 
   // Only perform further analysis if relay is the reference relay
